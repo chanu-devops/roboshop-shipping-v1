@@ -1,0 +1,43 @@
+name: Shipping CI
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run to build file
+        run: mvn clean package
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: shipping-jar
+          path: target/shipping-1.0.jar
+          retention-days: 1
+  test:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Tests
+        run: echo mvn test
+
+  docker:
+    runs-on: self-hosted
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: shipping-jar
+          path: ./
+      - uses: actions/checkout@v4
+      - name: Docker Login for pushing image
+        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 444206648334.dkr.ecr.us-east-1.amazonaws.com
+      - name: Docker Build
+        run: docker build -t 444206648334.dkr.ecr.us-east-1.amazonaws.com/shipping .
+      - name: Docker Push
+        run: docker push 444206648334.dkr.ecr.us-east-1.amazonaws.com/shipping
+
