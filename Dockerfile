@@ -1,4 +1,4 @@
-FROM            openjdk:17
+FROM            openjdk:17-ea-17-slim
 RUN             useradd -m -d /app roboshop
 USER            roboshop
 WORKDIR         /app
