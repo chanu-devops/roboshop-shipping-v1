@@ -19,6 +19,7 @@ jobs:
           path: target/shipping-1.0.jar
           retention-days: 1
   test:
+    needs: build
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
@@ -26,6 +27,7 @@ jobs:
         run: echo mvn test
 
   docker:
+    needs: test
     runs-on: self-hosted
     steps:
       - name: Download Artifact
