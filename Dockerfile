@@ -1,5 +1,5 @@
 FROM            openjdk:17-ea-17-slim
-RUN             useradd -m -d /app roboshop
+RUN             useradd -d /app -m roboshop
 USER            roboshop
 WORKDIR         /app
 COPY            ./shipping-1.0.jar /app/shipping.jar
