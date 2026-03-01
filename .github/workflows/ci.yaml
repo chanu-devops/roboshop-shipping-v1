@@ -30,12 +30,12 @@ jobs:
     needs: test
     runs-on: self-hosted
     steps:
+      - uses: actions/checkout@v4
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           name: shipping-jar
           path: ./
-      - uses: actions/checkout@v4
       - name: Docker Login for pushing image
         run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 444206648334.dkr.ecr.us-east-1.amazonaws.com
       - name: Docker Build
