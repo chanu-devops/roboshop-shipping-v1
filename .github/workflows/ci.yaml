@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci-cd-common:
+  call-workflow-passing-data:
     uses: chanu-devops/reusable-CICD-yaml/.github/workflows/cicd.yaml@main
     with:
       app-type: java
