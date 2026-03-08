@@ -6,40 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run to build file
-        run: mvn clean package
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: shipping-jar
-          path: target/shipping-1.0.jar
-          retention-days: 1
-  test:
-    needs: build
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run Tests
-        run: echo mvn test
-
-  docker:
-    needs: test
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: shipping-jar
-          path: ./
-      - name: Docker Login for pushing image
-        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 444206648334.dkr.ecr.us-east-1.amazonaws.com
-      - name: Docker Build
-        run: docker build -t 444206648334.dkr.ecr.us-east-1.amazonaws.com/shipping .
-      - name: Docker Push
-        run: docker push 444206648334.dkr.ecr.us-east-1.amazonaws.com/shipping
-
+  ci-cd-common:
+    uses: chanu-devops/reusable-CICD-yaml/.github/workflows/cicd.yaml@main
+    with:
+      app-type: java
+      micro-services: shipping
